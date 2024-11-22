@@ -17,18 +17,19 @@ class ItemsViewModel(application: Application) : AndroidViewModel(application) {
             getApplication(),
             ItemDatabase::class.java,
             "items_database"
-        ).build()
+        ).fallbackToDestructiveMigration() .build()
 
         itemDao = database.itemDao()
         itemsLiveData = itemDao.getAll()
     }
 
-    fun addItem(item: String) {
+    fun addItem(name: String, tip: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val newItem = ItemModel(name = item)
+            val newItem = ItemModel(name = name, tip = tip)
             itemDao.insert(newItem)
         }
     }
+
 
     fun removeItem(item: ItemModel) {
         viewModelScope.launch(Dispatchers.IO) {

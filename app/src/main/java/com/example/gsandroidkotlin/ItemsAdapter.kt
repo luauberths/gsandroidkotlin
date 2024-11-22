@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.Toast
 
 class ItemsAdapter(private val onItemRemoved: (ItemModel) -> Unit) :
     RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
@@ -16,13 +17,20 @@ class ItemsAdapter(private val onItemRemoved: (ItemModel) -> Unit) :
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val textView = view.findViewById<TextView>(R.id.textViewItem)
+        val textViewDescription = view.findViewById<TextView>(R.id.textViewItemDescription)
         val button = view.findViewById<ImageButton>(R.id.imageButton)
 
         fun bind(item: ItemModel) {
             textView.text = item.name
+            textViewDescription.text = item.tip
 
-            button.setOnClickListener {
-                onItemRemoved(item)
+            itemView.setOnClickListener {
+                val toastMessage = "Título: ${item.name}\nDescrição: ${item.tip}"
+                Toast.makeText(itemView.context, toastMessage, Toast.LENGTH_LONG).show()
+
+                button.setOnClickListener {
+                    onItemRemoved(item)
+                }
             }
         }
     }
